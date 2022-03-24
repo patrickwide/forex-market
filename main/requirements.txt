@@ -1,0 +1,10 @@
+ta
+schedule
+ccxt
+pandas
+numpy
+flask
+TA-Lib
+pandas
+yfinance
+config

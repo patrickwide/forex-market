@@ -1,0 +1,30 @@
+def check_buy_sell_signals(df):
+    global in_position
+    print("checking for buy and sell signals")
+    print(df.tail(5))
+    last_row_index = len(df.index) - 1
+    previous_row_index = last_row_index - 1
+
+    df['ENGULFING'] = ta.CDLENGULFING(df['open'], df['high'], df['low'], df['close'])
+    df['HAMMER'] = ta.CDLHAMMER(df['open'], df['high'], df['low'], df['close'])
+
+    df['Pivot'] = (df['high'] + df['low'] + df['close']) / 3
+
+    df['R1'] = 2 * df['Pivot'] - df['low']
+    df['S1'] = 2 * df['Pivot'] - df['high']
+    df['R2'] = df['Pivot'] + (df['high'] - df['low'])
+    df['S2'] = df['Pivot'] - (df['high'] - df['low'])
+    df['R3'] = df['Pivot'] + 2 * (df['high'] - df['low'])
+    df['S3'] = df['Pivot'] - 2 * (df['high'] - df['low'])
+    print("#R2", df['R2'][last_row_index])
+    print("#S2", df['S2'][last_row_index])
+
+    if not df['in_uptrend'][previous_row_index] and df['in_uptrend'][last_row_index]:
+        print("changed to uptrend!")
+        print("Checking for BUY signals")
+
+        if df['ENGULFING'][last_row_index] == 100 or df['HAMMER'][last_row_index] == 100:#FROM DOWN TREND TO UP TREND
+            print("R1",df['R1'][last_row_index] - df['close'][last_row_index])
+            print("S1",df['S1'][last_row_index] - df['close'][last_row_index])
+
+            print('BUY here')
